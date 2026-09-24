@@ -1,0 +1,54 @@
+[project]
+name = "feedlens"
+version = "0.0.1"
+description = "Your feed, your algorithm. Self-hosted, explainable, calibrated recommendations for what you already consume."
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Alexandre Amaral", email = "alexandre.samaral@protonmail.com" }]
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "pydantic>=2.8",
+  "pydantic-settings>=2.4",
+  "httpx>=0.27",
+  "feedparser>=6.0",
+  "sqlite-vec>=0.1.6",
+  "apscheduler>=3.10,<4",
+  "typer>=0.12",
+  "python-ulid>=2.7",
+  "jsonpath-ng>=1.6",
+  "mcp>=1.2",
+  "sse-starlette>=2.1",
+  "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+typesafe = ["typesafe-sdk>=0.7"]
+fulltext = ["trafilatura>=1.12"]
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.6", "mypy>=1.11", "respx>=0.21"]
+
+[project.scripts]
+feedlens = "feedlens.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/feedlens"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+strict = true
+python_version = "3.12"
+files = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
