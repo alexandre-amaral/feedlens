@@ -10,3 +10,4 @@ web/dist/
 src/feedlens/api/static/
 .env
 .DS_Store
+.superpowers/

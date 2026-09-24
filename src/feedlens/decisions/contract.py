@@ -84,7 +84,9 @@ class ChoiceAnswer(BaseModel):
         return self
 
     @classmethod
-    def from_probs(cls, probabilities: dict[str, float], meta: AnswerMeta | None = None) -> ChoiceAnswer:
+    def from_probs(
+        cls, probabilities: dict[str, float], meta: AnswerMeta | None = None
+    ) -> ChoiceAnswer:
         choice = max(probabilities, key=probabilities.__getitem__)
         return cls(
             choice=choice,

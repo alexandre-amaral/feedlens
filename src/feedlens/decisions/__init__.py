@@ -13,6 +13,15 @@ from feedlens.decisions.contract import (
 )
 
 __all__ = [
-    "Answer", "Answers", "Choice", "ChoiceAnswer", "DecisionBackend", "Noul", "NoulAnswer",
-    "Question", "QuestionSet", "Score", "ScoreAnswer",
+    "Answer",
+    "Answers",
+    "Choice",
+    "ChoiceAnswer",
+    "DecisionBackend",
+    "Noul",
+    "NoulAnswer",
+    "Question",
+    "QuestionSet",
+    "Score",
+    "ScoreAnswer",
 ]

@@ -39,10 +39,12 @@ class FakeBackend:
                 total = sum(raw.values())
                 out[name] = ChoiceAnswer.from_probs({k: v / total for k, v in raw.items()}, meta)
             elif isinstance(q, Score):
-                raw = [_unit(f"{key}|{name}|{i}") for i in range(len(q.criteria))]
-                total = sum(raw)
-                out[name] = ScoreAnswer.from_probs([v / total for v in raw], meta)
+                levels = [_unit(f"{key}|{name}|{i}") for i in range(len(q.criteria))]
+                total = sum(levels)
+                out[name] = ScoreAnswer.from_probs([v / total for v in levels], meta)
         return out
 
-    async def evaluate_many(self, states: list[State], questions: dict[str, Question]) -> list[Answers]:
+    async def evaluate_many(
+        self, states: list[State], questions: dict[str, Question]
+    ) -> list[Answers]:
         return [await self.evaluate(s, questions) for s in states]

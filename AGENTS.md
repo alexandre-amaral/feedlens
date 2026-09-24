@@ -14,6 +14,8 @@ Read `.specify/memory/constitution.md` first. It wins over this file; this file 
 uv sync                      # install
 uv run pytest -q             # tests
 uv run ruff check . && uv run ruff format .   # lint/format
+uv run mypy                  # types (strict)
+pre-commit install           # optional: run ruff+mypy on every commit
 uv run feedlens --help       # CLI
 cd web && pnpm i && pnpm dev # SPA dev server (proxies /api to :8765)
 ```

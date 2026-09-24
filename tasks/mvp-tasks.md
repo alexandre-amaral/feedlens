@@ -3,7 +3,7 @@
 Format: `- [ ] T-<phase>.<n> <title> — spec:<id> · depends_on:<ids> · est:<S|M|L>`. S ≈ under 1 h with an agent, M ≈ half day, L ≈ a day. Mark `[x]` in the commit that completes the task. Keep order; parallelize only within the same phase when `depends_on` allows.
 
 ## Phase 0 — Foundation
-- [ ] T-0.1 Tooling: `pyproject.toml` (uv, ruff, mypy strict, pytest), `.pre-commit-config.yaml`, GitHub Actions CI (lint+type+test on macOS + ubuntu) — spec:— · depends_on:— · est:S
+- [x] T-0.1 Tooling: `pyproject.toml` (uv, ruff, mypy strict, pytest), `.pre-commit-config.yaml`, GitHub Actions CI (lint+type+test on macOS + ubuntu) — spec:— · depends_on:— · est:S
 - [ ] T-0.2 Config: `feedlens.config.Settings` (pydantic-settings, `FEEDLENS_*` env, `~/.feedlens` paths) — depends_on:T-0.1 · est:S
 - [ ] T-0.3 Store: SQLite connection (WAL, foreign keys, sqlite-vec load), migration runner, `0001_init.sql` from `docs/DATA_MODEL.md` — depends_on:T-0.2 · est:M
 - [ ] T-0.4 Decision Contract: `Noul/Choice/Score`, `Answers`, `DecisionBackend` protocol, `FakeBackend`, math tests (spec 001 FR-1/2) — spec:001 · depends_on:T-0.1 · est:M

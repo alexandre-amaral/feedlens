@@ -12,18 +12,24 @@ from feedlens.decisions.contract import Answers, BackendCapabilities, Question, 
 
 class TypeSafeBackend:
     id = "typesafe:jev-latest"
-    capabilities = BackendCapabilities(supports_logprobs=False, supports_batch_state=True, max_state_tokens=32000)
+    capabilities = BackendCapabilities(
+        supports_logprobs=False, supports_batch_state=True, max_state_tokens=32000
+    )
 
     def __init__(self, api_key: str | None = None, model: str = "jev-latest") -> None:
         try:
             import typesafe_sdk  # noqa: F401
         except ImportError as exc:  # pragma: no cover
-            raise RuntimeError("Install with `uv sync --extra typesafe` to use the TypeSafe backend") from exc
+            raise RuntimeError(
+                "Install with `uv sync --extra typesafe` to use the TypeSafe backend"
+            ) from exc
         self.model = model
         self.id = f"typesafe:{model}"
 
     async def evaluate(self, state: State, questions: dict[str, Question]) -> Answers:
         raise NotImplementedError("T-3.7")
 
-    async def evaluate_many(self, states: list[State], questions: dict[str, Question]) -> list[Answers]:
+    async def evaluate_many(
+        self, states: list[State], questions: dict[str, Question]
+    ) -> list[Answers]:
         raise NotImplementedError("T-3.7")

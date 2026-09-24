@@ -49,6 +49,10 @@ strict = true
 python_version = "3.12"
 files = ["src"]
 
+[[tool.mypy.overrides]]
+module = ["typesafe_sdk", "typesafe_sdk.*", "feedparser", "feedparser.*", "sqlite_vec", "jsonpath_ng", "jsonpath_ng.*"]
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]

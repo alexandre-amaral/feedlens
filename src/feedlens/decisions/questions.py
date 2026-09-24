@@ -34,13 +34,22 @@ def question_set_v1(topics: dict[str, str] | None = None) -> QuestionSet:
             ),
             "depth": Score(
                 instructions="How deep or long-form is the content?",
-                criteria=["Shallow or promotional", "Light overview", "Substantive", "Deep, long-form or technical"],
+                criteria=[
+                    "Shallow or promotional",
+                    "Light overview",
+                    "Substantive",
+                    "Deep, long-form or technical",
+                ],
             ),
             "clickbait": Noul(
-                instructions="The title or description uses clickbait, outrage or manipulative framing.",
+                instructions=(
+                    "The title or description uses clickbait, outrage or manipulative framing."
+                ),
             ),
             "novelty": Noul(
-                instructions="The item says something the profile suggests the user has not seen recently.",
+                instructions=(
+                    "The item says something the profile suggests the user has not seen recently."
+                ),
             ),
             "avoid": Noul(
                 instructions="The item matches any entry in the profile's avoid list.",

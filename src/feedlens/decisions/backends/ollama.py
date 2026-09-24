@@ -3,7 +3,8 @@
 Plan:
 * one prompt per item: system = contract rules, user = rendered state + one question block
 * request JSON via Ollama `format` (schema whose values are restricted to the labels)
-* if the runtime returns `logprobs` for label tokens → distribution from logprobs (`method="logprobs"`)
+* if the runtime returns `logprobs` for label tokens → distribution from logprobs
+  (`method="logprobs"`)
 * else ask for a distribution in JSON → `method="verbalized"`, `calibrated=False`
 * asyncio.Semaphore(4), tenacity-style retry on 429/5xx/timeouts (max 3)
 """
@@ -26,5 +27,7 @@ class OllamaBackend:
     async def evaluate(self, state: State, questions: dict[str, Question]) -> Answers:
         raise NotImplementedError("T-2.3")
 
-    async def evaluate_many(self, states: list[State], questions: dict[str, Question]) -> list[Answers]:
+    async def evaluate_many(
+        self, states: list[State], questions: dict[str, Question]
+    ) -> list[Answers]:
         raise NotImplementedError("T-2.3")
