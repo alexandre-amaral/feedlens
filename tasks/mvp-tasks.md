@@ -9,7 +9,7 @@ Format: `- [ ] T-<phase>.<n> <title> — spec:<id> · depends_on:<ids> · est:<S
 - [x] T-0.4 Decision Contract: `Noul/Choice/Score`, `Answers`, `DecisionBackend` protocol, `FakeBackend`, math tests (spec 001 FR-1/2) — spec:001 · depends_on:T-0.1 · est:M
 - [x] T-0.5 Question set `v1` (`feedlens/decisions/questions.py`) + state renderer (profile + item → compact text, token budget) — spec:001 · depends_on:T-0.4 · est:S
 - [x] T-0.6 Decision cache (`decisions` table, `state_hash`) — spec:001 · depends_on:T-0.3,T-0.5 · est:S
-- [ ] T-0.7 CLI scaffold (`typer`): `init`, `decide --fake`, `stats` — depends_on:T-0.3,T-0.6 · est:S
+- [x] T-0.7 CLI scaffold (`typer`): `init`, `decide --fake`, `stats` — depends_on:T-0.3,T-0.6 · est:S
 
 ## Phase 1 — Ingestion
 - [ ] T-1.1 Canonical `Item`/`Signal` models, URL canonicalization, `url_hash`, upsert with merge rules — spec:002 · depends_on:T-0.3 · est:S
