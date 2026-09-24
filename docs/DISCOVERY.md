@@ -15,6 +15,6 @@ Answers given by the maintainer during discovery; these fixed the scope encoded 
 | Models | Ollama: Qwen3.5-4B (decisions), Qwen3-Embedding-0.6B (embeddings) |
 | MCP | App consumes MCP servers as connectors; exposing an MCP server deferred |
 | Language | English everywhere; UI i18n en/pt-BR |
-| License / repo | MIT, GitHub public `<github-user>/feedlens`, single author |
+| License / repo | MIT, GitHub public `alexandre-amaral/feedlens`, single author |
 | Handoff | Spec-kit style: constitution, specs/, plans/, tasks/ + ADRs + AGENTS.md; Claude Code does git init/push |
 | MVP success | Replace YouTube home + RSS reader for two weeks of daily use |

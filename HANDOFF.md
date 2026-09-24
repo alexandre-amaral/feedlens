@@ -13,12 +13,12 @@ git config user.email "alexandre.samaral@protonmail.com"
 git add -A
 git commit -m "chore: bootstrap feedlens with discovery, specs, plan and skeleton"
 
-# 2. Create the public repository (replace <github-user>)
-gh repo create <github-user>/feedlens --public --source=. --push \
+# 2. Create the public repository (replace alexandre-amaral)
+gh repo create alexandre-amaral/feedlens --public --source=. --push \
   --description "Your feed, your algorithm. Self-hosted, explainable, calibrated recommendations for what you already consume."
 
 # 3. Replace the placeholder everywhere
-grep -rl "<github-user>" . | xargs sed -i '' 's/<github-user>/YOUR_HANDLE/g'
+grep -rl "alexandre-amaral" . | xargs sed -i '' 's/alexandre-amaral/YOUR_HANDLE/g'
 git commit -am "chore: set repository owner"
 git push
 ```
