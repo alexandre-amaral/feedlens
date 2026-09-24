@@ -65,3 +65,19 @@ def test_stats_on_empty_db(_home: Path) -> None:
     assert "items: 0" in r.output
     assert "signals: 0" in r.output
     assert "decisions: 0" in r.output
+
+
+def test_decide_rejects_unknown_backend() -> None:
+    r = runner.invoke(app, ["decide", "--backend", "bogus", "--title", "x"])
+    assert r.exit_code == 2
+    assert "Traceback" not in r.output
+    assert "bogus" in r.output
+
+
+def test_decide_unimplemented_backend_is_a_clean_message(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("FEEDLENS_DECISION_BACKEND", "ollama")
+    get_settings.cache_clear()
+    r = runner.invoke(app, ["decide", "--title", "x"])
+    assert r.exit_code == 2
+    assert "Traceback" not in r.output
+    assert "not implemented" in r.output and "--backend fake" in r.output

@@ -5,13 +5,14 @@ from __future__ import annotations
 import asyncio
 import json
 import sqlite3
-from typing import Annotated
+from collections.abc import Coroutine
+from typing import Annotated, get_args
 
 import typer
 
 from feedlens.config import Settings, ensure_home, get_settings
 from feedlens.decisions.cache import DecisionCache
-from feedlens.decisions.contract import Answer, ChoiceAnswer, NoulAnswer, ScoreAnswer
+from feedlens.decisions.contract import Answer, Answers, ChoiceAnswer, NoulAnswer, ScoreAnswer
 from feedlens.decisions.questions import get_question_set
 from feedlens.decisions.registry import get_backend
 from feedlens.decisions.state import render_state
@@ -19,6 +20,7 @@ from feedlens.models import Item, ItemKind, Profile
 from feedlens.store.db import connect, migrate
 
 app = typer.Typer(help="feedlens — your feed, your algorithm.", no_args_is_help=True)
+BACKENDS = get_args(Settings.model_fields["decision_backend"].annotation)
 
 
 def _open(settings: Settings) -> sqlite3.Connection:
@@ -92,7 +94,11 @@ def decide(
         raise typer.BadParameter("pass --item <id> or --title <text>")
     settings = get_settings()
     if backend is not None:
-        settings = settings.model_copy(update={"decision_backend": backend})
+        if backend not in BACKENDS:
+            raise typer.BadParameter(
+                f"unknown backend {backend!r}; use one of {', '.join(BACKENDS)}"
+            )
+        settings = Settings.model_validate({**settings.model_dump(), "decision_backend": backend})
     be = get_backend(settings)
     conn = _open(settings)
     profile = _load_profile(conn)
@@ -104,7 +110,7 @@ def decide(
             typer.echo(f"item not found: {item}")
             raise typer.Exit(code=1)
         cache = DecisionCache(conn, qs, be, max_state_tokens=settings.max_state_tokens)
-        answers = asyncio.run(cache.get_or_evaluate(target, profile))
+        answers = _run(cache.get_or_evaluate(target, profile), be.id)
         cache_note = "cache hit" if cache.hits else "evaluated"
     else:
         assert title is not None
@@ -118,7 +124,7 @@ def decide(
             created_at="now",
         )
         state = render_state(profile, target, max_tokens=settings.max_state_tokens)
-        answers = asyncio.run(be.evaluate(state, qs.questions))
+        answers = _run(be.evaluate(state, qs.questions), be.id)
         cache_note = "ad-hoc (not cached)"
 
     typer.echo(f"item: {target.title}")
@@ -127,6 +133,14 @@ def decide(
     for name, a in answers.items():
         flag = "calibrated" if a.meta.calibrated else "raw"
         typer.echo(f"  {name.ljust(width)}  {a.type:<6}  {_format_answer(a)}  [{flag}]")
+
+
+def _run(coro: Coroutine[object, object, Answers], backend_id: str) -> Answers:
+    try:
+        return asyncio.run(coro)
+    except NotImplementedError as exc:
+        typer.echo(f"backend {backend_id} is not implemented yet ({exc}); use --backend fake")
+        raise typer.Exit(code=2) from None
 
 
 def _kind(value: str) -> ItemKind:
