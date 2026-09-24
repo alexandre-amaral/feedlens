@@ -108,3 +108,20 @@ def test_state_hash_tracks_profile_and_version_only() -> None:
     assert state_hash(p, qs) != state_hash(Profile(text="a", avoid=["z"]), qs)
     assert state_hash(p, qs) != state_hash(p, qs.model_copy(update={"version": "v2"}))
     assert len(state_hash(p, qs)) == 64
+
+
+def test_single_topic_profile_still_yields_a_valid_choice() -> None:
+    p = Profile(topics=[Topic(label="rust", description="Rust lang")])
+    qs = get_question_set("v1", profile=p)
+    topics = qs.questions["topics"]
+    assert isinstance(topics, Choice)
+    assert "rust" in topics.criteria
+    assert "other" in topics.criteria  # escape label added so Choice has >= 2 options
+
+
+def test_state_hash_tracks_question_set_content() -> None:
+    p1 = Profile(topics=[Topic(label="a", description="one"), Topic(label="b", description="two")])
+    p2 = Profile(
+        topics=[Topic(label="a", description="CHANGED"), Topic(label="b", description="two")]
+    )
+    assert state_hash(p1, get_question_set("v1", p1)) != state_hash(p2, get_question_set("v1", p2))

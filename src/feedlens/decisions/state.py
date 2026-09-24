@@ -68,6 +68,10 @@ def render_state(profile: Profile, item: Item, *, max_tokens: int = DEFAULT_STAT
 
 
 def state_hash(profile: Profile, question_set: QuestionSet) -> str:
-    """Cache-invalidation key: changes when the profile fragment or the question set changes."""
-    payload = f"{question_set.version}\n{render_profile(profile)}"
+    """Cache-invalidation key: changes when the profile fragment or the question set changes.
+
+    The full question set is hashed (not just its version) because the profile taxonomy is
+    injected into the `topics` Choice: editing a topic description must invalidate the cache.
+    """
+    payload = f"{question_set.model_dump_json()}\n{render_profile(profile)}"
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()

@@ -71,4 +71,6 @@ def get_question_set(version: str, profile: Profile | None = None) -> QuestionSe
     topics = None
     if profile is not None and profile.topics:
         topics = {t.label: t.description or t.label for t in profile.topics}
+        if len(topics) < 2:  # Choice needs >= 2 options; keep an escape label
+            topics.setdefault("other", DEFAULT_TOPICS["other"])
     return factory(topics)

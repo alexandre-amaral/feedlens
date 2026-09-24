@@ -24,7 +24,7 @@ cd web && pnpm i && pnpm dev # SPA dev server (proxies /api to :8765)
 
 1. **Decision Contract is sacred.** All model calls go through `feedlens.decisions.contract` (`Noul`, `Choice`, `Score`) and a `DecisionBackend`. Never call Ollama or any LLM directly from ranking, ingestion or API code.
 2. **Pointwise, batch-independent scoring.** A candidate's decisions depend only on `(user_state, item)`. Never on other candidates in the batch.
-3. **Decisions are cached by `(item_id, question_set_version, backend_id)`.** Changing weights, rules or profile must not trigger re-scoring; it must trigger re-ranking.
+3. **Decisions are cached by `(item_id, question_set_version, backend_id)`.** Changing weights or rules must not trigger re-scoring; it must trigger re-ranking. Changing the profile changes `state_hash` and re-evaluates lazily in the background (spec 001 AC-4, spec 003 FR-3).
 4. **Every score is explainable.** The ranking output carries a `breakdown` listing each signal, its raw value, weight and contribution. The UI renders it; tests assert it.
 5. **Local by default.** No network call except to configured sources, Ollama on localhost, and explicitly enabled backends. No telemetry.
 6. **Small models, small prompts.** Keep `state` under 4k tokens; profile text under 600 tokens. Irrelevant state degrades accuracy.
