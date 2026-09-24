@@ -1,6 +1,7 @@
 """Question set v1 — the MVP per-item decisions (spec 001, docs/ARCHITECTURE.md)."""
 
 from feedlens.decisions.contract import Choice, Noul, QuestionSet, Score
+from feedlens.models import Profile
 
 DEFAULT_TOPICS: dict[str, str] = {
     "ai-engineering": "Building with LLMs, agents, ML systems, data engineering",
@@ -56,3 +57,18 @@ def question_set_v1(topics: dict[str, str] | None = None) -> QuestionSet:
             ),
         },
     )
+
+
+QUESTION_SETS = {"v1": question_set_v1}
+
+
+def get_question_set(version: str, profile: Profile | None = None) -> QuestionSet:
+    """Build the named question set; the `topics` Choice uses the profile taxonomy when set."""
+    try:
+        factory = QUESTION_SETS[version]
+    except KeyError:
+        raise KeyError(f"unknown question set version: {version}") from None
+    topics = None
+    if profile is not None and profile.topics:
+        topics = {t.label: t.description or t.label for t in profile.topics}
+    return factory(topics)
