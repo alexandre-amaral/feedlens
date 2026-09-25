@@ -37,7 +37,9 @@ Discovery complete; specifications and implementation plan are in this repositor
 
 ```bash
 brew install ollama uv
+brew services start ollama          # or: ollama serve
 ollama pull qwen3.5:4b && ollama pull qwen3-embedding:0.6b
+git clone https://github.com/alexandre-amaral/feedlens.git && cd feedlens
 uv sync
 cp .env.example .env
 uv run feedlens init          # creates ~/.feedlens/feedlens.db
